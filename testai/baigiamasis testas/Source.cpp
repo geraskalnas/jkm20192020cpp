@@ -27,13 +27,14 @@ ofstream fr(raFailas);
 
 void Skaityti(const char sk[], const char sk2[], leidinys sar[], leidinys sar2[], int & n, int & m);
 void RasytiDuomenis(leidinys sar[], int n);
-void RasytiRezultatus(apdorotas sar[], int n);
+void RasytiRezultatus(apdorotas sar[], int n, int pig);
 bool Tikrinti(string a, string b, int j = 0);//ar a Turi buti pirmesnis uz b
 void RikiuotiPagalVarda(apdorotas sar[], int n);
 void SudarytiA(leidinys sar[], leidinys sar2[], int &n, int m);
 void SudarytiC(leidinys sar[], apdorotas sar2[], int n, int &k);
 void Salinti(leidinys sar[], int &n, int tr);
 void TrintiDublikatus(leidinys sar[], int &n);
+int Pigiausias(apdorotas sar[], int n);
 
 int main() {
 	int n, m;
@@ -42,7 +43,7 @@ int main() {
 
 	RasytiDuomenis(A, n);
 	RasytiDuomenis(B, m);
-	
+
 	SudarytiA(A, B, n, m);
 	TrintiDublikatus(A, n);
 
@@ -50,8 +51,10 @@ int main() {
 	SudarytiC(A, C, n, k);
 	RikiuotiPagalVarda(C, k);
 
-	RasytiRezultatus(C, k);
-	
+	int pig = Pigiausias(C, k);
+
+	RasytiRezultatus(C, k, pig);
+
 	return 0;
 }
 
@@ -76,7 +79,7 @@ void RasytiDuomenis(leidinys sar[], int n) {
 	}
 	fr << endl;
 }
-void RasytiRezultatus(apdorotas sar[], int n) {
+void RasytiRezultatus(apdorotas sar[], int n, int pig) {
 	fr << "Rezultatai:" << endl;
 	fr << left << setw(40) << "Leidinio pavadinimas " << setw(13) << "3 men. kaina " << setw(13) << "6 men. kaina " << setw(14) << "12 men. kaina " << endl;
 	for (int i = 0; i < n; i++) {
@@ -85,6 +88,7 @@ void RasytiRezultatus(apdorotas sar[], int n) {
 		fr << setw(13) << fixed << setprecision(2) << sar[i].men6Kaina;
 		fr << setw(14) << fixed << setprecision(2) << sar[i].men12Kaina << endl;
 	}
+	fr << "Pigiausias zurnalas metams: " << sar[pig].pavadinimas << " " << sar[pig].men12Kaina << endl;
 	fr.close();
 }
 bool Tikrinti(string a, string b, int j) {//grzina true jei a pirmesnis uz b
@@ -147,4 +151,15 @@ void TrintiDublikatus(leidinys sar[], int &n) {
 			}
 		}
 	}
+}
+int Pigiausias(apdorotas sar[], int n) {
+	double didz = 99999999999;
+	int id = -1;
+	for (int i = 0; i < n; i++) {
+		if (sar[i].men12Kaina < didz) {
+			id = i;
+			didz = sar[i].men12Kaina;
+		}
+	}
+	return id;
 }
